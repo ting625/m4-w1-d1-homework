@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Validator</title>
+   
+    <!-- Vue.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+   
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   
+    <!-- Bootstrap JS CDN -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+    .text-success{
+        text-decoration: line-through;
+        color: #689868
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-6 my-5">
+                    <password-helper inline-template>
+                        <div class="form-group mb-3">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" placeholder="Password" v-model="password">
+                            <small id="passwordHelp" class="form-text text-muted">
+                                Password should contain:
+                                <span :class="{'text-success': has_minimum_length, 'text-danger': !has_minimum_length}">
+                                    at least 8 characters
+                                </span>,
+                                <span :class="{'text-success': has_lowercase, 'text-danger': !has_lowercase}">
+                                    one lowercase letter
+                                </span>,
+                                <span :class="{'text-success': has_uppercase, 'text-danger': !has_uppercase}">
+                                    one uppercase letter
+                                </span>,
+                                <span :class="{'text-success': has_number, 'text-danger': !has_number}">
+                                    one number
+                                </span>, and
+                                <span :class="{'text-success': has_special, 'text-danger': !has_special}">
+                                    one special character
+                                </span>.
+                            </small>
+                        </div>
+                    </password-helper>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        Vue.component('password-helper', {
+            data() {
+                return {
+                    password: '',
+                    has_minimum_length: false,
+                    has_number: false,
+                    has_lowercase: false,
+                    has_uppercase: false,
+                    has_special: false
+                };
+            },
+            watch: {
+                password(newPassword) {
+                    this.has_minimum_length = newPassword.length >= 8;
+                    this.has_lowercase = /[a-z]/.test(newPassword);
+                    this.has_uppercase = /[A-Z]/.test(newPassword);
+                    this.has_number = /\d/.test(newPassword);
+                    this.has_special = /[!@#$%^&*(),.?":{}|<>]/.test(newPassword);
+                }
+            }
+        });
+
+        // Create a new Vue instance
+        new Vue({
+            el: '#app'
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
